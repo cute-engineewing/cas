@@ -1,4 +1,26 @@
-PROJECT_NAME=cas
-PROJECT_SRC=$(addprefix src/, main.c)
+CC	?= gcc
+RM	= rm -f
 
-include deps/mubuild/main.mk
+CFLAGS	+= -ansi -pedantic -pedantic-errors -Wall -Werror -Wextra -fpic -Iinc
+LDFLAGS	+= 
+
+TARGET	= cas
+
+SRCS	= main.c
+OBJS	= $(addprefix src/, $(SRCS:.c=.o))
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $^
+
+clean:
+	$(RM) $(OBJS)
+	$(RM) $(TARGET)
+
+re: clean all
+
+.PHONY: all clean clean re
