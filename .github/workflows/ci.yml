@@ -1,0 +1,21 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cc: [gcc, clang]
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: 'true' 
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install build-essential
+        sudo apt-get install clang
+    - name: Build with ${{ matrix.cc }}
+      run: CC=${{ matrix.cc }} make
